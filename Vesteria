@@ -295,55 +295,7 @@ do
 	Groups.Misc = Tabs.Main:AddLeftGroupbox("Misc")
 	Groups.AutoStats = Tabs.Main:AddRightGroupbox("Auto Stats")
 	Groups.AutoSell = Tabs.Main:AddRightGroupbox("Auto Sell")
-
--- Define the serials for each item
-local serials = {
-    ["Red Mushroom"] = "{4cf46483-1b06-4870-bcc8-cc2041b9d22f}{d1772d33-b45b-4e63-a2b7-9433d67afd84}",
-    ["Blue Mushroom"] = "{some-serial-for-blue-mushroom}",
-    ["Green Mushroom"] = "{some-serial-for-green-mushroom}",
-    ["None"] = nil -- This will be used to stop the loop
-}
-
--- Auto Sell Tab
-Groups.AutoSell = Tabs.Main:AddRightGroupbox("Auto Sell")
-
--- Auto Sell Dropdown
-Groups.AutoSell:AddDropdown('AutoSellDropdown', {
-    Values = { 'Red Mushroom', 'Blue Mushroom', 'Green Mushroom', 'None' }, -- Add your items here
-    Default = 1, -- Default index (1 for 'Red Mushroom')
-    Multi = false, -- Set to true if you want to allow multiple selections
-
-    Text = 'Select Item to Auto Sell',
-    Tooltip = 'Choose an item to automatically sell when conditions are met.',
-
-    Callback = function(selectedItem)
-        -- Start a loop to sell the selected item
-        task.spawn(function()
-            while true do
-                -- Check if the selected item is "None"
-                if selectedItem == "None" then
-                    break -- Exit the loop if "None" is selected
-                end
-
-                -- Construct the args table based on the selected item
-                local args = {
-                    [1] = {
-                        [1] = {
-                            ["serial"] = serials[selectedItem], -- Get the serial from the table
-                            ["stacks"] = 1
-                        }
-                    }
-                }
-
-                -- Invoke the remote function to sell the item
-                game:GetService("ReplicatedStorage"):WaitForChild("network"):WaitForChild("RemoteFunction"):WaitForChild("playerRequest_sellItemsToShop"):InvokeServer(unpack(args))
-
-                -- Wait for a short duration before selling again (adjust as needed)
-                task.wait(1) -- Adjust the wait time as necessary
-            end
-        end)
-    end
-})
+	Groups.AutoSell = Tabs.Main:AddRightGroupbox("Auto Sell")
 
 	if game.PlaceId == 3207211233 then
 		Groups.AutoSQR = Tabs.Main:AddRightGroupbox("SQR")
